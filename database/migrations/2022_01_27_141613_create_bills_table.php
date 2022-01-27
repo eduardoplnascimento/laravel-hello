@@ -19,8 +19,8 @@ class CreateBillsTable extends Migration
             $table->integer('installment');
             $table->float('value');
             $table->unsignedBigInteger('client_id');
-            $table->timestamp('due_date');
-            $table->timestamp('payment_date');
+            $table->timestamp('due_date')->nullable();
+            $table->timestamp('payment_date')->nullable();
             $table->timestamps();
 
             $table->foreign('client_id')->references('id')->on('clients');
