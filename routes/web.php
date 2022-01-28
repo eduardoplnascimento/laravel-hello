@@ -26,3 +26,30 @@ Route::get('/clients/bills/{client}', [ClientController::class, 'bills']);
 Route::get('/bills/expensive/{value}', [BillController::class, 'expensive']);
 Route::get('/bills/between/{value1}/{value2}', [BillController::class, 'between']);
 
+
+Route::get('/soma/{num1}/{num2}', function ($num1, $num2) {
+    logger()->info('Soma feita');
+    return $num1 + $num2;
+});
+
+Route::get('/div/{num1}/{num2}', function ($num1, $num2) {
+    if ($num2 == 0) {
+        return logger()->error('Divisor zero!');
+    }
+
+    logger()->info('Div feita');
+    return $num1 / $num2;
+});
+
+Route::get('/mult/{num1}/{num2}', function ($num1, $num2) {
+    if ($num1 < 0 || $num2 < 0) {
+        return logger()->warning('Negativo');
+    }
+
+    return $num1 * $num2;
+});
+
+Route::get('/sub/{num1}/{num2}', function ($num1, $num2) {
+    logger()->debug('Sub feita', ['num1' => $num1, 'num2' => $num2, 'sub' => ($num1 - $num2)]);
+    return $num1 - $num2;
+});
