@@ -13,7 +13,7 @@ class StoreBillRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return !str_contains($this->user()->name, 'Guest');
     }
 
     /**
@@ -24,7 +24,25 @@ class StoreBillRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'invoice' => 'required',
+            'installment' => 'required',
+            'value' => 'required',
+            'client_id' => 'required'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'invoice.required' => 'Uma fatura é obrigatória',
+            'installment.required' => 'Uma parcela é obrigatória',
+            'value.required' => 'Um valor é obrigatório',
+            'client_id.required' => 'Um cliente é obrigatório'
         ];
     }
 }
