@@ -82,4 +82,38 @@ class CalculadoraService
             'data' => $div
         ];
     }
+
+    public function maxMult($num)
+    {
+        # code...
+    }
+
+    public function maxPrime($limit)
+    {
+        try {
+            $max = 1;
+            for ($num = 1; $num < $limit; $num++) {
+                for ($div = 2; $div < $num; $div++) {
+                    if ($num % $div === 0) {
+                        break;
+                    }
+                }
+                if ($div === $num) {
+                    $max = $num;
+                }
+            }
+        } catch (\Throwable $th) {
+            logger()->error($th);
+            return [
+                'success' => false,
+                'message' => 'Erro ao buscar número primo'
+            ];
+        }
+        
+        return [
+            'success' => true,
+            'message' => 'Maior número primo encontrado',
+            'data' => $max
+        ];
+    }
 }

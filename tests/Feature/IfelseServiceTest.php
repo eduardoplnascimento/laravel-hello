@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\FindMaxPrime;
 use Tests\TestCase;
 use App\Models\Bill;
 use Faker\Generator;
@@ -183,5 +184,21 @@ class IfelseServiceTest extends TestCase
         $response = app(BillRepository::class)->find($bill->id);
 
         $this->assertEquals($bill->invoice, $response->invoice);
+    }
+
+    /**
+     * Crie a service app/Services/CalculadoraService e ao acessar o método
+     * div($num1, $num2), resposta deve vir com o formato:
+     * <code>['success' => true, 'message' => 'Div feita com sucesso', 'data' => $result]</code>.
+     * Caso a várivel $num2 for igual a zero, retornar no seguinte formato:
+     * <code>['success' => false, 'message' => 'Divisão por zero']</code>.
+     * Caso aconteça alguma exception, retornar a resposta no formato:
+     * <code>['success' => false, 'message' => 'Erro ao fazer div']</code>.
+     *
+     * @return void
+     */
+    public function test_find_max_prime()
+    {
+        FindMaxPrime::dispatch(100000);
     }
 }

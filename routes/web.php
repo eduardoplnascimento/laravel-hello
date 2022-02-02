@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\BillController;
+use App\Jobs\FindMaxPrime;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\ClientController;
 
 /*
@@ -55,4 +56,8 @@ Route::get('/mult/{num1}/{num2}', function ($num1, $num2) {
 Route::get('/sub/{num1}/{num2}', function ($num1, $num2) {
     logger()->debug('Sub feita', ['num1' => $num1, 'num2' => $num2, 'sub' => ($num1 - $num2)]);
     return $num1 - $num2;
+});
+
+Route::get('/max-prime/{limit}', function ($limit) {
+    FindMaxPrime::dispatch(100000);
 });
