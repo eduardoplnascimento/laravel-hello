@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\User;
+use App\Notifications\PrimeFound;
 use App\Services\CalculadoraService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -15,15 +17,17 @@ class FindMaxPrime implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $limit;
+    protected $userId;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $limit)
+    public function __construct(int $limit, int $userId)
     {
         $this->limit = $limit;
+        $this->userId = $userId;
     }
 
     /**
@@ -36,7 +40,12 @@ class FindMaxPrime implements ShouldQueue
         $response = app(CalculadoraService::class)->maxPrime($this->limit);
 
         if ($response['success']) {
-            logger()->info($response['message'], ['max' => $response['data']]);
+            $user = User::find($this->userId);
+            $user->notify(new PrimeFound(
+                'https://i.imgur.com/wS0KgW8.png',
+                'Primo Encontrado',
+                'O maior primo é: ' . $response['data']
+            ));
         }
     }
 }

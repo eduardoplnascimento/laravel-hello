@@ -116,4 +116,23 @@ class CalculadoraService
             'data' => $max
         ];
     }
+
+    public function celsius(float $farenheit)
+    {
+        try {
+            $celsius = ($farenheit - 32) * 5 / 9;
+        } catch (\Throwable $th) {
+            logger()->error($th);
+            return [
+                'success' => false,
+                'message' => 'Erro ao converter'
+            ];
+        }
+        
+        return [
+            'success' => true,
+            'message' => 'Conversão realizada com sucesso',
+            'data' => $celsius
+        ];        
+    }
 }

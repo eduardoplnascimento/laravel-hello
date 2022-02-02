@@ -2,8 +2,11 @@
 
 use App\Jobs\FindMaxPrime;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\ClientController;
+use App\Jobs\ConvertCelsius;
+use App\Services\CalculadoraService;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +19,14 @@ use App\Http\Controllers\ClientController;
 |
 */
 
-Route::get('/', [ClientController::class, 'index']);
+Route::get('/', [AuthController::class, 'login'])->name('login');
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/signin', [AuthController::class, 'signin'])->name('signin');
+Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
 
 Route::post('/clients/store', [ClientController::class, 'store']);
 Route::get('/clients/show/{client}', [ClientController::class, 'show']);
@@ -58,6 +68,18 @@ Route::get('/sub/{num1}/{num2}', function ($num1, $num2) {
     return $num1 - $num2;
 });
 
+Route::get('/celsius/{farenheit}', function ($farenheit) {
+    ConvertCelsius::dispatch($farenheit, auth()->id());
+    return 'Cálculo está na fila';
+});
+
 Route::get('/max-prime/{limit}', function ($limit) {
-    FindMaxPrime::dispatch(100000);
+    FindMaxPrime::dispatch($limit, auth()->id());
+    return 'Cálculo está na fila';
+});
+Route::get('/notifications', function () {
+    $user = auth()->user();
+    foreach ($user->unreadNotifications as $notification) {
+        echo $notification->data['description'] . '<br>';
+    }
 });
